@@ -1,7 +1,3 @@
-import http from 'http';
+import server from './server';
 
-const server = http.createServer((req, res) => {
-  res.end('Hello world');
-})
-
-server.listen(4001, () => console.log('listen 4001'));
+server(4001);
