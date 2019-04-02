@@ -4,4 +4,4 @@ const server = http.createServer((req, res) => {
   res.end('Hello world');
 })
 
-server.listen(6666, () => console.log('listen 6666'));
+server.listen(4001, () => console.log('listen 4001'));
