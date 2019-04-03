@@ -6,7 +6,7 @@ import axios from 'axios';
 import server from '../server';
 
 const hostname = 'localhost';
-const port = 4002;
+const port = 4003;
 const url = `http://${hostname}:${port}`;
 
 describe('phonebook', () => {
@@ -23,4 +23,18 @@ describe('phonebook', () => {
       }
     });
   });
+
+  it('/users.json', (done) => {
+    server(port, async (s, users) => {
+      try {
+        const { data } = await axios.get(`${url}/users.json`);
+        expect(data).toEqual(users);
+        done();
+      } catch (e) {
+        done(e);
+      } finally {
+        s.close();
+      }
+    })
+  })
 })

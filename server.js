@@ -19,7 +19,7 @@ const server = async (port, callback = () => {}) => {
       }, {});
 
       const server = makeServer(users);
-      server.listen(port, callback.bind(null, server));
+      server.listen(port, callback.bind(null, server, users));
   } catch (e) {
     console.log(e);
   }
