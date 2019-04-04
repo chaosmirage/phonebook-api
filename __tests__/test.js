@@ -24,6 +24,24 @@ describe('phonebook', () => {
     });
   });
 
+  it('/undefined', (done) => {
+    server(port, async (s, users) => {
+      try {
+        const { status } = await axios.get(
+          `${url}/abc`,
+          { validateStatus: () => true },
+        );
+
+        expect(status).toBe(404);
+        done();
+      } catch (e) {
+        done(e);
+      } finally {
+        s.close();
+      }
+    })
+  })
+
   it('/users.json', (done) => {
     server(port, async (s, users) => {
       try {
