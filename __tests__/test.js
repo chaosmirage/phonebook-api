@@ -37,4 +37,23 @@ describe('phonebook', () => {
       }
     })
   })
+
+  it('/users?name="Ruby"', (done) => {
+    server(port, async (s, users) => {
+      try {
+        const { data } = await axios.get(`${url}/users.json?name=Ruby`);
+        expect(data).toEqual([
+          {
+            name: 'Ruby Russel Sr.',
+            phone: '386.997.2221',
+          },
+        ]);
+        done();
+      } catch (e) {
+        done(e);
+      } finally {
+        s.close();
+      }
+    })
+  })
 })

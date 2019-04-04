@@ -1,5 +1,11 @@
 import http from 'http';
 import url from 'url';
+import querystring from 'querystring';
+
+const getParams = (address) => {
+  const { query = '' } = url.parse(address);
+  return querystring.parse(decodeURI(query));
+}
 
 const router = {
   GET: {
@@ -12,7 +18,23 @@ const router = {
       res.end(messages.join('\n'));
     },
     '/users.json': (req, res, users) => {
+      const { name: nameParam } = getParams(req.url);
+
       res.setHeader('Content-Type', 'application/json');
+
+      if (nameParam) {
+        const filtered = Object.values(users)
+          .filter(({ name }) => {
+            const preparedName = name.toLowerCase();
+            const preparedNameParam = nameParam.trim().toLowerCase();
+
+            return preparedName.includes(preparedNameParam);
+          })
+
+        res.end(JSON.stringify(filtered));
+        return;
+      }
+
       res.end(JSON.stringify(users));
     },
   }
