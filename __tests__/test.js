@@ -9,6 +9,14 @@ const hostname = 'localhost';
 const port = 4003;
 const url = `http://${hostname}:${port}`;
 
+const USER_MOCK = {
+  id: 17,
+  data: {
+    name: 'Ruby Russel Sr.',
+    phone: '386.997.2221',
+  },
+};
+
 describe('phonebook', () => {
   it('/', (done) => {
     server(port, async (s) => {
@@ -24,7 +32,7 @@ describe('phonebook', () => {
     });
   });
 
-  it('/undefined', (done) => {
+  it('/<undefined>', (done) => {
     server(port, async (s, users) => {
       try {
         const { status } = await axios.get(
@@ -39,8 +47,8 @@ describe('phonebook', () => {
       } finally {
         s.close();
       }
-    })
-  })
+    });
+  });
 
   it('/users.json', (done) => {
     server(port, async (s, users) => {
@@ -53,18 +61,15 @@ describe('phonebook', () => {
       } finally {
         s.close();
       }
-    })
-  })
+    });
+  });
 
-  it('/users?name="Ruby"', (done) => {
+  it('/users?name=<name>', (done) => {
     server(port, async (s, users) => {
       try {
         const { data } = await axios.get(`${url}/users.json?name=Ruby`);
         expect(data).toEqual([
-          {
-            name: 'Ruby Russel Sr.',
-            phone: '386.997.2221',
-          },
+          USER_MOCK.data,
         ]);
         done();
       } catch (e) {
@@ -72,6 +77,20 @@ describe('phonebook', () => {
       } finally {
         s.close();
       }
-    })
-  })
-})
+    });
+  });
+
+  it('/users/<id>', (done) => {
+    server(port, async (s, users) => {
+      try {
+        const { data } = await axios.get(`${url}/users/${USER_MOCK.id}.json`);
+        expect(data).toEqual(USER_MOCK.data);
+        done();
+      } catch (e) {
+        done(e);
+      } finally {
+        s.close();
+      }
+    });
+  });
+});
